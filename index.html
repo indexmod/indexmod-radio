@@ -11,7 +11,6 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden; /* Отключаем скролл, чтобы фоновое изображение не двигалось */
         }
 
         #backgroundImage {
@@ -22,13 +21,7 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            z-index: -1; /* Фон должен быть позади остальных элементов */
-            opacity: 1; /* Убедитесь, что фоновое изображение не прозрачное */
-        }
-
-        header, section {
-            position: relative; /* Относительное позиционирование для правильного отображения слоев */
-            z-index: 1; /* Слои поверх фонового изображения */
+            z-index: -1; /* Позади остальных элементов */
         }
     </style>
 </head>
@@ -56,8 +49,8 @@
         const trackName = document.getElementById('trackName');
         const progressBar = document.getElementById('progressBar');
         const currentTimeElement = document.getElementById('currentTime');
-        const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
         const backgroundImage = document.getElementById('backgroundImage');
+        const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
 
         let playlist = [];
         let currentTrack = 0;
@@ -65,11 +58,13 @@
         let images = ['images/background1.jpg', 'images/background2.jpg', 'images/background3.jpg']; // Массив изображений
         let currentImageIndex = 0;
 
-        // Меняем изображение по клику
-        backgroundImage.addEventListener('click', function() {
-            currentImageIndex = (currentImageIndex + 1) % images.length; // Меняем индекс
-            backgroundImage.style.backgroundImage = `url(${images[currentImageIndex]})`; // Меняем изображение
-        });
+        // Функция для смены фона каждые 10 секунд
+        function changeBackgroundImage() {
+            setInterval(() => {
+                currentImageIndex = (currentImageIndex + 1) % images.length; // Меняем индекс
+                backgroundImage.style.backgroundImage = `url(${images[currentImageIndex]})`; // Меняем изображение
+            }, 10000); // 10000 миллисекунд = 10 секунд
+        }
 
         // Функция для парсинга плейлиста
         function parsePlaylist(data) {
@@ -114,7 +109,7 @@
             // Событие завершения трека
             audioPlayer.addEventListener('ended', () => {
                 clearInterval(interval);
-                currentTrack = (currentTrack + 1) % playlist.length;
+                currentTrack = nextTrack;
                 startFromTime = 0; // Следующий трек начинаем с начала
                 playNextTrack();
             });
@@ -158,6 +153,7 @@
                 playlist = parsePlaylist(data);
                 if (playlist.length > 0) {
                     startPlayback();
+                    changeBackgroundImage(); // Запуск функции смены фона
                 } else {
                     console.error('Playlist is empty after parsing.');
                 }
