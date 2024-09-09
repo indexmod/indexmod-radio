@@ -33,10 +33,10 @@
 
         let playlist = [];
         let currentTrack = 0;
+        let startFromTime = 0;
 
         // Функция для парсинга плейлиста
         function parsePlaylist(data) {
-            console.log('Parsing playlist...');
             return data.split('\n')
                 .filter(line => line && !line.startsWith('#'))
                 .map(line => line.trim());
@@ -47,7 +47,6 @@
             return new Promise((resolve) => {
                 const tempAudio = new Audio(track);
                 tempAudio.addEventListener('loadedmetadata', () => {
-                    console.log(`Track duration for ${track}: ${tempAudio.duration} seconds`);
                     resolve(tempAudio.duration);
                 });
             });
@@ -60,12 +59,13 @@
                 return;
             }
 
-            console.log(`Playing track: ${playlist[currentTrack]}`);
+            console.log(`Playing track: ${playlist[currentTrack]} from ${startFromTime} seconds`);
             const trackDuration = await getTrackDuration(playlist[currentTrack]);
             const nextTrack = (currentTrack + 1) % playlist.length;
 
             audioPlayer.src = playlist[currentTrack];
             trackName.textContent = `Now Playing: ${playlist[currentTrack]}`;
+            audioPlayer.currentTime = startFromTime;  // Устанавливаем время начала воспроизведения
             audioPlayer.play();
 
             // Обновление прогресса и времени каждую секунду
@@ -79,6 +79,7 @@
             audioPlayer.addEventListener('ended', () => {
                 clearInterval(interval);
                 currentTrack = nextTrack;
+                startFromTime = 0; // Следующий трек начинаем с начала
                 playNextTrack();
             });
         }
@@ -90,8 +91,24 @@
             return `${minutes}:${secs}`;
         }
 
-        // Запуск воспроизведения сразу после взаимодействия с пользователем
+        // Рассчитываем трек и время для начала воспроизведения
+        function calculateStartPosition() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Файл 01 — полночь, файл 24 — 23:00
+            currentTrack = (hours === 0) ? 0 : (hours % 24) - 1;
+            if (hours === 23) currentTrack = 23; // 24-й файл для 23 часов
+
+            startFromTime = minutes * 60 + seconds; // Начало с текущих минут и секунд
+            console.log(`Starting from track ${currentTrack + 1}, second ${startFromTime}`);
+        }
+
+        // Запуск воспроизведения с нужного момента
         function startPlayback() {
+            calculateStartPosition();
             window.addEventListener('click', function() {
                 if (!audioPlayer.paused) return; // Проверка, если уже играет
                 playNextTrack();
@@ -102,9 +119,7 @@
         fetch(playlistUrl)
             .then(response => response.text())
             .then(data => {
-                console.log('Playlist loaded successfully');
                 playlist = parsePlaylist(data);
-                console.log('Parsed playlist:', playlist);
                 if (playlist.length > 0) {
                     startPlayback();
                 } else {
