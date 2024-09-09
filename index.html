@@ -6,8 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>My Radio Station</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #backgroundImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Позади остальных элементов */
+        }
+    </style>
 </head>
 <body>
+    <div id="backgroundImage" style="background-image: url('images/background1.jpg');"></div>
+
     <header>
         <h1>My Radio Station</h1>
         <p>Welcome to my online radio station! Enjoy the music.</p>
@@ -30,10 +50,19 @@
         const progressBar = document.getElementById('progressBar');
         const currentTimeElement = document.getElementById('currentTime');
         const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
+        const backgroundImage = document.getElementById('backgroundImage');
 
         let playlist = [];
         let currentTrack = 0;
         let startFromTime = 0;
+        let images = ['images/background1.jpg', 'images/background2.jpg', 'images/background3.jpg']; // Массив изображений
+        let currentImageIndex = 0;
+
+        // Меняем изображение по клику
+        backgroundImage.addEventListener('click', function() {
+            currentImageIndex = (currentImageIndex + 1) % images.length; // Меняем индекс
+            backgroundImage.style.backgroundImage = `url(${images[currentImageIndex]})`; // Меняем изображение
+        });
 
         // Функция для парсинга плейлиста
         function parsePlaylist(data) {
