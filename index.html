@@ -21,47 +21,60 @@
         </audio>
     </section>
 
-    <section>
-        <h2>Playlist</h2>
-        <ul id="playlist">
-            <li><a href="audio/program01.mp3">Track 1</a></li>
-            <li><a href="audio/jingle.mp3">Jingle</a></li>
-            <li><a href="audio/program02.mp3">Track 2</a></li>
-            <!-- Добавь больше треков сюда -->
-        </ul>
-    </section>
-
     <script>
-        // Получаем аудиоплеер
         const audioPlayer = document.getElementById('audioPlayer');
+        const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
 
-        // Загружаем плейлист из файла playlist.m3u
-        fetch('playlist.m3u')
+        let playlist = [];
+        let currentTrack = 0;
+
+        function parsePlaylist(data) {
+            return data.split('\n')
+                .filter(line => line && !line.startsWith('#'))
+                .map(line => line.trim());
+        }
+
+        function getTrackDuration(track) {
+            return new Promise((resolve) => {
+                const tempAudio = new Audio(track);
+                tempAudio.addEventListener('loadedmetadata', () => {
+                    resolve(tempAudio.duration);
+                });
+            });
+        }
+
+        async function playNextTrack() {
+            if (playlist.length === 0) return;
+
+            const trackDuration = await getTrackDuration(playlist[currentTrack]);
+            const nextTrack = (currentTrack + 1) % playlist.length;
+
+            audioPlayer.src = playlist[currentTrack];
+            audioPlayer.play();
+
+            setTimeout(() => {
+                currentTrack = nextTrack;
+                playNextTrack();
+            }, (trackDuration - 15) * 1000); // 15 секунд до конца трека
+        }
+
+        function startPlayback() {
+            const now = new Date();
+            const nextHour = new Date();
+            nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+
+            const delay = nextHour - now;
+
+            setTimeout(() => {
+                playNextTrack();
+            }, delay);
+        }
+
+        fetch(playlistUrl)
             .then(response => response.text())
             .then(data => {
-                // Преобразуем содержимое M3U файла в массив плейлиста
-                const playlist = data.split('\n')
-                    .filter(line => line && !line.startsWith('#'))
-                    .map(line => line.trim());
-
-                let currentTrack = 0;
-
-                // Воспроизводим следующий трек
-                function playNextTrack() {
-                    currentTrack++;
-                    if (currentTrack >= playlist.length) {
-                        currentTrack = 0; // Начать с первого трека после последнего
-                    }
-                    audioPlayer.src = playlist[currentTrack];
-                    audioPlayer.play();
-                }
-
-                // Автоматически воспроизводить следующий трек по завершении текущего
-                audioPlayer.addEventListener('ended', playNextTrack);
-
-                // Начинаем проигрывание с первого трека
-                audioPlayer.src = playlist[currentTrack];
-                audioPlayer.play();
+                playlist = parsePlaylist(data);
+                startPlayback();
             })
             .catch(error => {
                 console.error('Ошибка при загрузке плейлиста:', error);
