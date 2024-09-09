@@ -57,6 +57,20 @@
         .table-container {
             flex: 1;
         }
+
+        #startButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #startButton:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +88,7 @@
             <source src="audio/program01.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+        <button id="startButton">Start Playback</button>
     </section>
 
     <div class="table-container">
@@ -100,6 +115,7 @@
         const currentTimeElement = document.getElementById('currentTime');
         const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
         const scheduleTableBody = document.querySelector('#scheduleTable tbody');
+        const startButton = document.getElementById('startButton');
 
         let playlist = [];
         let currentTrack = 0;
@@ -213,17 +229,19 @@
             playNextTrack();
         }
 
+        // Запуск воспроизведения при нажатии кнопки
+        startButton.addEventListener('click', () => {
+            startPlayback();
+        });
+
         // Загрузка и парсинг плейлиста
         fetch(playlistUrl)
             .then(response => response.text())
             .then(data => {
                 playlist = parsePlaylist(data);
                 createSchedule(); // Создаем расписание
-                if (playlist.length > 0) {
-                    startPlayback();
-                } else {
-                    console.error('Playlist is empty after parsing.');
-                }
+                // Автоматически нажимаем кнопку при загрузке страницы
+                startButton.click();
             })
             .catch(error => {
                 console.error('Ошибка при загрузке плейлиста:', error);
