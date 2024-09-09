@@ -171,10 +171,12 @@
             const seconds = now.getSeconds();
 
             // Файл 01 — полночь, файл 24 — 23:00
-            currentTrack = (hours === 0) ? 0 : (hours % 24) - 1;
+            currentTrack = (hours === 0) ? 0 : hours - 1;
             if (hours === 23) currentTrack = 23; // 24-й файл для 23 часов
 
-            startFromTime = minutes * 60 + seconds; // Начало с текущих минут и секунд
+            // Для определения, какой файл воспроизводить в пределах текущего часа
+            const minutesSinceStartOfHour = minutes + (seconds / 60);
+            startFromTime = minutesSinceStartOfHour * 60; // Начало с текущих минут и секунд
             console.log(`Starting from track ${currentTrack + 1}, second ${startFromTime}`);
         }
 
@@ -233,7 +235,6 @@
             .catch(error => {
                 console.error('Ошибка при загрузке плейлиста:', error);
             });
-
     </script>
 </body>
 </html>
