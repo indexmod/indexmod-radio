@@ -16,7 +16,7 @@
     <section>
         <h2>Now Playing</h2>
         <audio controls autoplay id="audioPlayer">
-            <source src="audio/your-audio-file.mp3" type="audio/mpeg">
+            <source src="audio/program01.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
     </section>
@@ -24,24 +24,48 @@
     <section>
         <h2>Playlist</h2>
         <ul id="playlist">
-            <li><a href="audio/your-audio-file.mp3">Track 1</a></li>
-            <li><a href="audio/another-audio-file.mp3">Track 2</a></li>
+            <li><a href="audio/program01.mp3">Track 1</a></li>
+            <li><a href="audio/jingle.mp3">Jingle</a></li>
+            <li><a href="audio/program02.mp3">Track 2</a></li>
             <!-- Добавь больше треков сюда -->
         </ul>
     </section>
 
     <script>
+        // Получаем аудиоплеер
         const audioPlayer = document.getElementById('audioPlayer');
-        const playlist = document.getElementById('playlist');
-        const links = playlist.getElementsByTagName('a');
 
-        for (let i = 0; i < links.length; i++) {
-            links[i].addEventListener('click', function (e) {
-                e.preventDefault();
-                audioPlayer.src = this.href;
+        // Загружаем плейлист из файла playlist.m3u
+        fetch('playlist.m3u')
+            .then(response => response.text())
+            .then(data => {
+                // Преобразуем содержимое M3U файла в массив плейлиста
+                const playlist = data.split('\n')
+                    .filter(line => line && !line.startsWith('#'))
+                    .map(line => line.trim());
+
+                let currentTrack = 0;
+
+                // Воспроизводим следующий трек
+                function playNextTrack() {
+                    currentTrack++;
+                    if (currentTrack >= playlist.length) {
+                        currentTrack = 0; // Начать с первого трека после последнего
+                    }
+                    audioPlayer.src = playlist[currentTrack];
+                    audioPlayer.play();
+                }
+
+                // Автоматически воспроизводить следующий трек по завершении текущего
+                audioPlayer.addEventListener('ended', playNextTrack);
+
+                // Начинаем проигрывание с первого трека
+                audioPlayer.src = playlist[currentTrack];
                 audioPlayer.play();
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке плейлиста:', error);
             });
-        }
     </script>
 </body>
 </html>
