@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Radio Station</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>My Radio Station</h1>
+        <p>Welcome to my online radio station! Enjoy the music.</p>
+    </header>
+
+    <section>
+        <h2>Now Playing</h2>
+        <audio controls autoplay id="audioPlayer">
+            <source src="audio/your-audio-file.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </section>
+
+    <section>
+        <h2>Playlist</h2>
+        <ul id="playlist">
+            <li><a href="audio/your-audio-file.mp3">Track 1</a></li>
+            <li><a href="audio/another-audio-file.mp3">Track 2</a></li>
+            <!-- Добавь больше треков сюда -->
+        </ul>
+    </section>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playlist = document.getElementById('playlist');
+        const links = playlist.getElementsByTagName('a');
+
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', function (e) {
+                e.preventDefault();
+                audioPlayer.src = this.href;
+                audioPlayer.play();
+            });
+        }
+    </script>
+</body>
+</html>
