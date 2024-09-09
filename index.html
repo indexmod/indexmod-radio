@@ -19,6 +19,40 @@
             z-index: 1; /* Поверх белого фона */
             padding: 20px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .status {
+            text-align: center;
+        }
+
+        .status .active {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: green;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -36,6 +70,21 @@
             <source src="audio/program01.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+
+        <h2>Schedule</h2>
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>Start Time</th>
+                    <th>Program Name</th>
+                    <th>File Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Содержимое таблицы будет добавлено динамически -->
+            </tbody>
+        </table>
     </section>
 
     <script>
@@ -44,6 +93,7 @@
         const progressBar = document.getElementById('progressBar');
         const currentTimeElement = document.getElementById('currentTime');
         const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
+        const scheduleTable = document.getElementById('scheduleTable').getElementsByTagName('tbody')[0];
 
         let playlist = [];
         let currentTrack = 0;
@@ -94,8 +144,11 @@
                 clearInterval(interval);
                 currentTrack = nextTrack;
                 startFromTime = 0; // Следующий трек начинаем с начала
+                updateTable();
                 playNextTrack();
             });
+
+            updateTable();
         }
 
         // Форматирование времени
@@ -126,12 +179,33 @@
             playNextTrack(); // Запуск трека сразу
         }
 
+        // Обновление таблицы
+        function updateTable() {
+            const rows = scheduleTable.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const statusCell = rows[i].getElementsByTagName('td')[3];
+                statusCell.innerHTML = ''; // Очищаем статус
+                if (i === currentTrack) {
+                    statusCell.innerHTML = '<div class="active"></div>'; // Отображаем активный трек
+                }
+            }
+        }
+
         // Загрузка и парсинг плейлиста
         fetch(playlistUrl)
             .then(response => response.text())
             .then(data => {
                 playlist = parsePlaylist(data);
                 if (playlist.length > 0) {
+                    // Создаем строки таблицы
+                    playlist.forEach((track, index) => {
+                        const startTime = index === 0 ? '00:00' : `${index}:00`; // Формируем время начала
+                        const row = scheduleTable.insertRow();
+                        row.insertCell(0).textContent = startTime;
+                        row.insertCell(1).textContent = `Program ${index + 1}`;
+                        row.insertCell(2).textContent = track;
+                        row.insertCell(3).className = 'status';
+                    });
                     startPlayback();
                 } else {
                     console.error('Playlist is empty after parsing.');
