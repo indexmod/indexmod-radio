@@ -123,10 +123,7 @@
         // Запуск воспроизведения с нужного момента
         function startPlayback() {
             calculateStartPosition();
-            window.addEventListener('click', function() {
-                if (!audioPlayer.paused) return; // Проверка, если уже играет
-                playNextTrack();
-            });
+            playNextTrack(); // Запуск трека сразу
         }
 
         // Загрузка и парсинг плейлиста
