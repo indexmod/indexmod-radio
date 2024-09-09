@@ -11,6 +11,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            overflow: hidden; /* Отключаем скролл, чтобы фоновое изображение не двигалось */
         }
 
         #backgroundImage {
@@ -21,7 +22,13 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            z-index: -1; /* Позади остальных элементов */
+            z-index: -1; /* Фон должен быть позади остальных элементов */
+            opacity: 1; /* Убедитесь, что фоновое изображение не прозрачное */
+        }
+
+        header, section {
+            position: relative; /* Относительное позиционирование для правильного отображения слоев */
+            z-index: 1; /* Слои поверх фонового изображения */
         }
     </style>
 </head>
@@ -107,7 +114,7 @@
             // Событие завершения трека
             audioPlayer.addEventListener('ended', () => {
                 clearInterval(interval);
-                currentTrack = nextTrack;
+                currentTrack = (currentTrack + 1) % playlist.length;
                 startFromTime = 0; // Следующий трек начинаем с начала
                 playNextTrack();
             });
