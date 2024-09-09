@@ -18,7 +18,7 @@
         <p id="trackName">Loading track...</p>
         <progress id="progressBar" value="0" max="100"></progress>
         <p>Current time: <span id="currentTime">00:00</span></p>
-        <audio id="audioPlayer" autoplay hidden>
+        <audio id="audioPlayer" hidden>
             <source src="audio/program01.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
@@ -34,6 +34,7 @@
         let playlist = [];
         let currentTrack = 0;
 
+        // Функция для парсинга плейлиста
         function parsePlaylist(data) {
             console.log('Parsing playlist...');
             return data.split('\n')
@@ -41,6 +42,7 @@
                 .map(line => line.trim());
         }
 
+        // Получаем длительность трека
         function getTrackDuration(track) {
             return new Promise((resolve) => {
                 const tempAudio = new Audio(track);
@@ -51,6 +53,7 @@
             });
         }
 
+        // Воспроизведение следующего трека
         async function playNextTrack() {
             if (playlist.length === 0) {
                 console.error('Playlist is empty!');
@@ -65,13 +68,14 @@
             trackName.textContent = `Now Playing: ${playlist[currentTrack]}`;
             audioPlayer.play();
 
-            // Update progress and time every second
+            // Обновление прогресса и времени каждую секунду
             const interval = setInterval(() => {
                 const currentTime = audioPlayer.currentTime;
                 progressBar.value = (currentTime / trackDuration) * 100;
                 currentTimeElement.textContent = formatTime(currentTime);
             }, 1000);
 
+            // Событие завершения трека
             audioPlayer.addEventListener('ended', () => {
                 clearInterval(interval);
                 currentTrack = nextTrack;
@@ -79,26 +83,22 @@
             });
         }
 
+        // Форматирование времени
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
             const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
             return `${minutes}:${secs}`;
         }
 
+        // Запуск воспроизведения сразу после взаимодействия с пользователем
         function startPlayback() {
-            console.log('Starting playback...');
-            const now = new Date();
-            const nextHour = new Date();
-            nextHour.setHours(now.getHours() + 1, 0, 0, 0);
-
-            const delay = nextHour - now;
-            console.log(`Delaying start by ${delay / 1000} seconds`);
-
-            setTimeout(() => {
+            window.addEventListener('click', function() {
+                if (!audioPlayer.paused) return; // Проверка, если уже играет
                 playNextTrack();
-            }, delay);
+            });
         }
 
+        // Загрузка и парсинг плейлиста
         fetch(playlistUrl)
             .then(response => response.text())
             .then(data => {
@@ -114,6 +114,7 @@
             .catch(error => {
                 console.error('Ошибка при загрузке плейлиста:', error);
             });
+
     </script>
 </body>
 </html>
