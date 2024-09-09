@@ -15,7 +15,10 @@
 
     <section>
         <h2>Now Playing</h2>
-        <audio controls autoplay id="audioPlayer">
+        <p id="trackName">Loading track...</p>
+        <progress id="progressBar" value="0" max="100"></progress>
+        <p>Current time: <span id="currentTime">00:00</span></p>
+        <audio id="audioPlayer" autoplay hidden>
             <source src="audio/program01.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
@@ -23,6 +26,9 @@
 
     <script>
         const audioPlayer = document.getElementById('audioPlayer');
+        const trackName = document.getElementById('trackName');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeElement = document.getElementById('currentTime');
         const playlistUrl = 'playlist.m3u'; // Путь к вашему плейлисту
 
         let playlist = [];
@@ -50,12 +56,27 @@
             const nextTrack = (currentTrack + 1) % playlist.length;
 
             audioPlayer.src = playlist[currentTrack];
+            trackName.textContent = `Now Playing: ${playlist[currentTrack]}`;
             audioPlayer.play();
 
-            setTimeout(() => {
+            // Update progress and time every second
+            const interval = setInterval(() => {
+                const currentTime = audioPlayer.currentTime;
+                progressBar.value = (currentTime / trackDuration) * 100;
+                currentTimeElement.textContent = formatTime(currentTime);
+            }, 1000);
+
+            audioPlayer.addEventListener('ended', () => {
+                clearInterval(interval);
                 currentTrack = nextTrack;
                 playNextTrack();
-            }, (trackDuration - 15) * 1000); // 15 секунд до конца трека
+            });
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${minutes}:${secs}`;
         }
 
         function startPlayback() {
