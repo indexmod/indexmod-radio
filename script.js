@@ -3,6 +3,7 @@ const trackName = document.getElementById('trackName');
 const progressBar = document.getElementById('progressBar');
 const currentTimeElement = document.getElementById('currentTime');
 const scheduleTableBody = document.querySelector('#scheduleTable tbody');
+const playButton = document.getElementById('playButton'); // Получаем кнопку
 
 let playlist = [];
 let currentTrack = 0;
@@ -94,5 +95,5 @@ function init() {
     playTrack();
 }
 
-// Запуск после взаимодействия пользователя
-window.addEventListener('click', init);
+// Запуск после нажатия кнопки
+playButton.addEventListener('click', init);
