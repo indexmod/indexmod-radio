@@ -2,12 +2,12 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: white; /* Устанавливаем белый фон */
+    background-color: white;
 }
 
 header, section {
     position: relative;
-    z-index: 1; /* Поверх белого фона */
+    z-index: 1;
     padding: 20px;
 }
 
@@ -39,7 +39,7 @@ th {
     background-color: green;
 }
 
-.container {
+.table-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -47,18 +47,4 @@ th {
 
 .table-container {
     flex: 1;
-}
-
-#startButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#startButton:hover {
-    background-color: #0056b3;
 }
