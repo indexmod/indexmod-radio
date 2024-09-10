@@ -47,11 +47,17 @@ function formatTime(seconds) {
 
 // Обновление информации о треке
 function updateTrackInfo() {
+    console.log('Updating track info...');
     const currentTrack = playlist[currentTrackIndex];
     const nextTrack = playlist[(currentTrackIndex + 1) % playlist.length];
 
+    if (!currentTrack) {
+        console.error('Current track not found!');
+        return;
+    }
+
     trackName.textContent = currentTrack.name;
-    nextTrackName.textContent = nextTrack.name;
+    nextTrackName.textContent = nextTrack ? nextTrack.name : 'None';
 
     // Установить источник для плеера
     audioPlayer.src = currentTrack.file;
@@ -73,6 +79,7 @@ function updateProgressBar() {
 
 // Обработчик завершения трека для перехода к следующему
 audioPlayer.addEventListener('ended', () => {
+    console.log('Track ended, moving to next track...');
     currentTrackIndex = (currentTrackIndex + 1) % playlist.length;  // Следующий трек
     startFromTime = 0;  // Начало следующего трека с нуля
     updateTrackInfo();  // Обновляем информацию о треке
@@ -81,6 +88,7 @@ audioPlayer.addEventListener('ended', () => {
 
 // Функция запуска воспроизведения
 function startRadio() {
+    console.log('Starting radio...');
     updateTrackInfo();
     audioPlayer.play();
 
