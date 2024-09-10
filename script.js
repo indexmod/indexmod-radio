@@ -61,18 +61,31 @@ function calculateStartPosition() {
 function playTrack() {
     audioPlayer.src = `audio/program${currentTrack.toString().padStart(2, '0')}.mp3`;
     trackName.textContent = `Now Playing: audio/program${currentTrack.toString().padStart(2, '0')}.mp3`;
+
+    // Установка времени начала воспроизведения
     audioPlayer.currentTime = startFromTime;
-    audioPlayer.play();
 
-    audioPlayer.addEventListener('timeupdate', () => {
-        const currentTime = audioPlayer.currentTime;
-        const duration = audioPlayer.duration;
-        progressBar.value = (currentTime / duration) * 100;
-        currentTimeElement.textContent = formatTime(currentTime);
+    // Ждем, пока загрузятся метаданные, прежде чем начать воспроизведение
+    audioPlayer.addEventListener('loadedmetadata', () => {
+        audioPlayer.play();
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            const currentTime = audioPlayer.currentTime;
+            const duration = audioPlayer.duration;
+            progressBar.value = (currentTime / duration) * 100;
+            currentTimeElement.textContent = formatTime(currentTime);
+        });
+
+        updateScheduleStatus();  // Обновить статус активного трека
     });
-
-    updateScheduleStatus();  // Обновить статус активного трека
 }
+
+// Обработчик завершения трека для перехода к следующему
+audioPlayer.addEventListener('ended', () => {
+    currentTrack = (currentTrack + 1) % 24;  // Переход на следующий трек
+    startFromTime = 0;  // Начало нового трека с 0 секунд
+    playTrack();  // Воспроизвести следующий трек
+});
 
 // Инициализация
 function init() {
@@ -81,4 +94,5 @@ function init() {
     playTrack();
 }
 
-window.addEventListener('DOMContentLoaded', init);
+// Запуск после взаимодействия пользователя
+window.addEventListener('click', init);
