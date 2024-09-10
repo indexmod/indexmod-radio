@@ -69,14 +69,15 @@ function formatTime(seconds) {
 // Рассчитываем трек и время для начала воспроизведения
 function calculateStartPosition() {
     const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
+    const hours = now.getHours(); // Текущий час (0–23)
+    const minutes = now.getMinutes(); // Текущие минуты
+    const seconds = now.getSeconds(); // Текущие секунды
 
-    currentTrack = hours % 24; // Текущий трек соответствует текущему часу (0–23)
+    currentTrack = hours % 24; // Соответствие текущего трека текущему часу
 
-    const startTimeInMinutes = minutes + (seconds / 60); // Текущие минуты и секунды
-    trackStartTime = startTimeInMinutes * 60; // Начало с текущих минут и секунд
+    // Рассчитываем, сколько времени прошло от начала текущего часа
+    const elapsedTimeInSeconds = (minutes * 60) + seconds;
+    trackStartTime = elapsedTimeInSeconds; // Устанавливаем точку начала воспроизведения в секундах
 }
 
 // Обновление статуса в расписании
