@@ -1,25 +1,64 @@
-body {
-    font-family: Arial, sans-serif;
+body, html {
     margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: white; /* Устанавливаем белый фон */
+}
+
+header, section {
+    position: relative;
+    z-index: 1; /* Поверх белого фона */
     padding: 20px;
-    background-color: #f4f4f4;
-    text-align: center;
 }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
-}
-
-h1 {
-    margin: 0;
-}
-
-audio {
+table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
 }
 
-section {
-    margin: 20px 0;
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: gray;
+}
+
+.active {
+    background-color: green;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.table-container {
+    flex: 1;
+}
+
+#startButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#startButton:hover {
+    background-color: #0056b3;
 }
