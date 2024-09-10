@@ -4,74 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gradient with Oval Button and Audio</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body, html {
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Анимация градиента фона */
-    .gradient {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, red, yellow);
-      background-size: 400% 400%;
-      animation: gradientChange 5s ease infinite;
-      z-index: -1; /* Градиент находится под кнопкой */
-    }
-
-    @keyframes gradientChange {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    /* Стили для овальной кнопки */
-    .oval-button {
-      width: 150px;
-      height: 80px;
-      border: 2px solid black;
-      border-radius: 50px;
-      background-color: transparent;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      z-index: 1; /* Кнопка поверх градиента */
-    }
-
-    /* Треугольник в центре кнопки */
-    .triangle {
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-top: 25px solid black; /* Изменено с border-bottom на border-top */
-      transform: rotate(-90deg); /* Поворачиваем треугольник на 90 градусов */
-    }
-
-    /* Скрытый аудиоплеер */
-    audio {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"> <!-- Подключаем файл стилей -->
 </head>
 <body>
 
@@ -84,25 +17,8 @@
   </div>
 
   <!-- Скрытый аудиоплеер -->
-  <audio id="audioPlayer" src="https://indexmod.github.io/indexmod-radio/audio/program00.mp3"></audio>
+  <audio id="audioPlayer" src="/audio/program00.mp3"></audio>
 
-  <script>
-    // Функция для воспроизведения аудиофайла
-    function playAudio() {
-      var audio = document.getElementById('audioPlayer');
-
-      // Проверка: файл должен быть доступен
-      if (audio) {
-        audio.play().then(() => {
-          console.log("Audio started playing");
-        }).catch((error) => {
-          console.error("Audio playback failed: ", error);
-        });
-      } else {
-        console.error("Audio element not found");
-      }
-    }
-  </script>
-
+  <script src="script.js"></script> <!-- Подключаем внешний JavaScript -->
 </body>
 </html>

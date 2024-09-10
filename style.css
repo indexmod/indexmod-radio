@@ -1,77 +1,66 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: white;
-    font-family: Arial, sans-serif; /* Добавлено для лучшего отображения текста */
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-header, section {
-    position: relative;
-    z-index: 1;
-    padding: 20px;
+/* Анимация градиента фона */
+.gradient {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, red, yellow);
+  background-size: 400% 400%;
+  animation: gradientChange 5s ease infinite;
+  z-index: -1; /* Градиент находится под кнопкой */
 }
 
-header {
-    background-color: #f4f4f4;
-    border-bottom: 1px solid #ddd;
+@keyframes gradientChange {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Стили для овальной кнопки */
+.oval-button {
+  width: 150px;
+  height: 80px;
+  border: 2px solid black;
+  border-radius: 50px;
+  background-color: transparent;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1; /* Кнопка поверх градиента */
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+/* Треугольник в центре кнопки */
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 25px solid black; /* Изменено с border-bottom на border-top */
+  transform: rotate(90deg); /* Поворачиваем треугольник на 90 градусов */
 }
 
-#progressBar {
-    width: 100%;
-    max-width: 600px; /* Ограничение ширины прогресс-бара */
-    margin: 10px 0;
-}
-
-#elapsedTime, #remainingTime {
-    font-size: 16px;
-    margin: 5px 0;
-}
-
-.table-container {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-.status-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-    background-color: gray;
-}
-
-.active {
-    background-color: green;
+/* Скрытый аудиоплеер */
+audio {
+  display: none;
 }
