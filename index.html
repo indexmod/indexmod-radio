@@ -7,40 +7,24 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>My Radio Station</h1>
-        <p>Welcome to my online radio station! Enjoy the music.</p>
-    </header>
 
-    <section>
-        <h2>Now Playing</h2>
-        <p id="trackName">Loading track...</p>
+        <!-- Кнопка старта -->
+        <button id="startButton">Start</button>
+
+        <!-- Прогресс-бар -->
         <progress id="progressBar" value="0" max="100"></progress>
-        <p>Current time: <span id="currentTime">00:00</span></p>
-        <audio id="audioPlayer" hidden>
-            <source src="audio/program00.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
 
-        <!-- Добавлена кнопка запуска -->
-        <button id="playButton">Start Radio</button>
-    </section>
+        <!-- Текущая программа -->
+        <p id="currentTrack">Current Track: <span id="trackName">None</span></p>
+        <p id="trackTime">Elapsed: <span id="elapsedTime">00:00</span> / Remaining: <span id="remainingTime">00:00</span></p>
 
-    <div class="table-container">
-        <h2>Program Schedule</h2>
-        <table id="scheduleTable">
-            <thead>
-                <tr>
-                    <th>Start Time</th>
-                    <th>Program Title</th>
-                    <th>File Name</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be dynamically added here -->
-            </tbody>
-        </table>
+        <!-- Следующая программа -->
+        <p id="nextTrack">Next Track: <span id="nextTrackName">None</span></p>
+
+        <!-- Аудиоплеер -->
+        <audio id="audioPlayer" hidden></audio>
     </div>
 
     <script src="scripts.js"></script>

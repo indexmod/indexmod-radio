@@ -1,99 +1,92 @@
-const audioPlayer = document.getElementById('audioPlayer');
-const trackName = document.getElementById('trackName');
+// Получаем элементы страницы
+const startButton = document.getElementById('startButton');
 const progressBar = document.getElementById('progressBar');
-const currentTimeElement = document.getElementById('currentTime');
-const scheduleTableBody = document.querySelector('#scheduleTable tbody');
-const playButton = document.getElementById('playButton'); // Получаем кнопку
+const trackName = document.getElementById('trackName');
+const elapsedTimeElement = document.getElementById('elapsedTime');
+const remainingTimeElement = document.getElementById('remainingTime');
+const nextTrackName = document.getElementById('nextTrackName');
+const audioPlayer = document.getElementById('audioPlayer');
 
-let playlist = [];
-let currentTrack = 0;
-let startFromTime = 0;
+// Плейлист программ
+const playlist = [
+    { name: "Program 00", file: "audio/program00.mp3" },
+    { name: "Program 01", file: "audio/program01.mp3" },
+    { name: "Program 02", file: "audio/program02.mp3" },
+    { name: "Program 03", file: "audio/program03.mp3" },
+    { name: "Program 04", file: "audio/program04.mp3" },
+    { name: "Program 05", file: "audio/program05.mp3" },
+    { name: "Program 06", file: "audio/program06.mp3" },
+    { name: "Program 07", file: "audio/program07.mp3" },
+    { name: "Program 08", file: "audio/program08.mp3" },
+    { name: "Program 09", file: "audio/program09.mp3" },
+    { name: "Program 10", file: "audio/program10.mp3" },
+    { name: "Program 11", file: "audio/program11.mp3" },
+    { name: "Program 12", file: "audio/program12.mp3" },
+    { name: "Program 13", file: "audio/program13.mp3" },
+    { name: "Program 14", file: "audio/program14.mp3" },
+    { name: "Program 15", file: "audio/program15.mp3" },
+    { name: "Program 16", file: "audio/program16.mp3" },
+    { name: "Program 17", file: "audio/program17.mp3" },
+    { name: "Program 18", file: "audio/program18.mp3" },
+    { name: "Program 19", file: "audio/program19.mp3" },
+    { name: "Program 20", file: "audio/program20.mp3" },
+    { name: "Program 21", file: "audio/program21.mp3" },
+    { name: "Program 22", file: "audio/program22.mp3" },
+    { name: "Program 23", file: "audio/program23.mp3" }
+];
 
-// Заполнение расписания
-function createSchedule() {
-    for (let i = 0; i < 24; i++) {
-        const row = document.createElement('tr');
-        const startTime = i === 0 ? '00:00' : `${i.toString().padStart(2, '0')}:00`;
-        const programTitle = `Program ${i}`;
-        const fileName = `audio/program${i.toString().padStart(2, '0')}.mp3`;
-        row.innerHTML = `
-            <td>${startTime}</td>
-            <td>${programTitle}</td>
-            <td>${fileName}</td>
-            <td><span class="status-indicator"></span></td>
-        `;
-        scheduleTableBody.appendChild(row);
-    }
-}
+let currentTrackIndex = 0;  // Индекс текущего трека
+let startFromTime = 0;      // Время начала текущего трека в секундах
 
-// Обновление статуса программы
-function updateScheduleStatus() {
-    const rows = scheduleTableBody.querySelectorAll('tr');
-    rows.forEach(row => {
-        const statusCell = row.querySelector('.status-indicator');
-        statusCell.classList.remove('active');
-    });
-    const activeRow = scheduleTableBody.children[currentTrack];
-    if (activeRow) {
-        const statusCell = activeRow.querySelector('.status-indicator');
-        statusCell.classList.add('active');
-    }
-}
-
-// Форматирование времени
+// Функция для форматирования времени
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
     const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
     return `${minutes}:${secs}`;
 }
 
-// Рассчитать трек и время
-function calculateStartPosition() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
+// Обновление информации о треке
+function updateTrackInfo() {
+    const currentTrack = playlist[currentTrackIndex];
+    const nextTrack = playlist[(currentTrackIndex + 1) % playlist.length];
 
-    currentTrack = hours;  // Программа соответствует часу
-    startFromTime = minutes * 60 + seconds;  // Текущее время в секундах
+    trackName.textContent = currentTrack.name;
+    nextTrackName.textContent = nextTrack.name;
+
+    // Установить источник для плеера
+    audioPlayer.src = currentTrack.file;
+    audioPlayer.currentTime = startFromTime;
 }
 
-// Начать воспроизведение трека
-function playTrack() {
-    audioPlayer.src = `audio/program${currentTrack.toString().padStart(2, '0')}.mp3`;
-    trackName.textContent = `Now Playing: audio/program${currentTrack.toString().padStart(2, '0')}.mp3`;
+// Обновление прогресс-бара и времени
+function updateProgressBar() {
+    const currentTime = audioPlayer.currentTime;
+    const duration = audioPlayer.duration;
 
-    // Установка времени начала воспроизведения
-    audioPlayer.currentTime = startFromTime;
+    // Обновляем прогресс-бар
+    progressBar.value = (currentTime / duration) * 100;
 
-    // Ждем, пока загрузятся метаданные, прежде чем начать воспроизведение
-    audioPlayer.addEventListener('loadedmetadata', () => {
-        audioPlayer.play();
-
-        audioPlayer.addEventListener('timeupdate', () => {
-            const currentTime = audioPlayer.currentTime;
-            const duration = audioPlayer.duration;
-            progressBar.value = (currentTime / duration) * 100;
-            currentTimeElement.textContent = formatTime(currentTime);
-        });
-
-        updateScheduleStatus();  // Обновить статус активного трека
-    });
+    // Обновляем время
+    elapsedTimeElement.textContent = formatTime(currentTime);
+    remainingTimeElement.textContent = formatTime(duration - currentTime);
 }
 
 // Обработчик завершения трека для перехода к следующему
 audioPlayer.addEventListener('ended', () => {
-    currentTrack = (currentTrack + 1) % 24;  // Переход на следующий трек
-    startFromTime = 0;  // Начало нового трека с 0 секунд
-    playTrack();  // Воспроизвести следующий трек
+    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;  // Следующий трек
+    startFromTime = 0;  // Начало следующего трека с нуля
+    updateTrackInfo();  // Обновляем информацию о треке
+    audioPlayer.play();  // Проигрываем следующий трек
 });
 
-// Инициализация
-function init() {
-    createSchedule();
-    calculateStartPosition();
-    playTrack();
+// Функция запуска воспроизведения
+function startRadio() {
+    updateTrackInfo();
+    audioPlayer.play();
+
+    // Обновляем прогресс-бар каждые 500 мс
+    setInterval(updateProgressBar, 500);
 }
 
-// Запуск после нажатия кнопки
-playButton.addEventListener('click', init);
+// Добавляем обработчик на кнопку "Start"
+startButton.addEventListener('click', startRadio);
