@@ -15,12 +15,60 @@ function loadSchedule() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'schedule.html', true);
   xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      document.getElementById('scheduleContainer').innerHTML = xhr.responseText;
-      document.getElementById('scheduleContainer').style.display = 'block'; // Показываем таблицу
+    if (xhr.readyState == 4) {
+      if (xhr.status == 200) {
+        var scheduleContainer = document.getElementById('scheduleContainer');
+        scheduleContainer.innerHTML = xhr.responseText;
+        scheduleContainer.style.display = 'block'; // Показываем таблицу
+
+        // Обновляем таблицу с расписанием
+        updateSchedule();
+      } else {
+        console.error("Failed to load schedule. Status:", xhr.status);
+      }
     }
   };
   xhr.send();
+}
+
+// Функция для обновления таблицы расписания
+function updateSchedule() {
+  var now = new Date();
+  var currentHour = now.getHours();
+  var currentMinute = now.getMinutes();
+  var currentSecond = now.getSeconds();
+
+  var rows = document.querySelectorAll('#scheduleContainer tbody tr');
+  rows.forEach((row, index) => {
+    var statusCell = row.querySelector('.status');
+    var startTimeCell = row.querySelector('.startTime');
+    var programNameCell = row.querySelector('.programName');
+    var remainingTimeCell = row.querySelector('.remainingTime');
+
+    var programHour = index;
+    var programStart = new Date();
+    programStart.setHours(programHour, 0, 0);
+    var programEnd = new Date(programStart);
+    programEnd.setMinutes(programStart.getMinutes() + 59);
+    programEnd.setSeconds(programStart.getSeconds() + 45);
+
+    var programName = `Program ${programHour}`;
+    var remainingTime = (programEnd - now) / 1000; // Время в секундах
+
+    // Обновляем состояние текущей программы
+    if (index === currentHour && now >= programStart && now < programEnd) {
+      statusCell.innerHTML = '<span style="color:green;">&#8226;</span>'; // Зеленый кружок
+    } else {
+      statusCell.innerHTML = '';
+    }
+
+    startTimeCell.textContent = programStart.toTimeString().slice(0, 5);
+    programNameCell.textContent = programName;
+
+    var minutes = Math.floor(remainingTime / 60);
+    var seconds = Math.floor(remainingTime % 60);
+    remainingTimeCell.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  });
 }
 
 // Функция для воспроизведения аудиофайла по текущему времени
@@ -55,24 +103,18 @@ function playAudioByTime() {
     "/indexmod-radio/audio/program23.mp3"   // 23:00
   ];
 
-  // Получаем текущее время (часы и минуты)
   var now = new Date();
   var currentHour = now.getHours();
   var currentMinute = now.getMinutes();
   var currentSecond = now.getSeconds();
 
-  // Выбираем соответствующую программу на основе текущего часа
   var selectedAudioFile = playlist[currentHour];
   audio.src = selectedAudioFile;
-
-  // Устанавливаем текущее время аудио в 0 (начало трека)
   audio.currentTime = 0;
 
-  // Запускаем воспроизведение программы
   audio.play().then(() => {
     console.log(`Playing ${selectedAudioFile}`);
 
-    // Запускаем джингл за 15 секунд до конца текущего часа
     var jingleStart = (60 * 60 - (currentMinute * 60 + currentSecond) - 15) * 1000; // 15 секунд до конца
     setTimeout(() => {
       jingle.play().catch((error) => {
@@ -80,21 +122,16 @@ function playAudioByTime() {
       });
     }, jingleStart);
 
-    // Запускаем таймер для остановки программы и перехода к следующему файлу в плейлисте
     var timeToNextHour = (60 * 60 - (currentMinute * 60 + currentSecond)) * 1000; // До следующего часа
     setTimeout(() => {
       audio.pause();
       console.log("Program ended");
 
-      // Устанавливаем источник для следующего часа
       var nextHour = (currentHour + 1) % 24;
       var nextAudioFile = playlist[nextHour];
       audio.src = nextAudioFile;
-
-      // Устанавливаем текущее время аудио в 0 (начало следующего трека)
       audio.currentTime = 0;
 
-      // Запускаем следующий трек
       audio.play().then(() => {
         console.log(`Playing ${nextAudioFile}`);
       }).catch((error) => {
@@ -106,12 +143,4 @@ function playAudioByTime() {
   }).catch((error) => {
     console.error("Audio playback failed:", error);
   });
-}
-
-// Функция для обновления оставшегося времени в таблице
-function updateRemainingTime(currentHour, timeLeftInProgram) {
-  var remainingTimeCell = document.getElementById('remainingTime' + currentHour);
-  var minutes = Math.floor(timeLeftInProgram / 60);
-  var seconds = timeLeftInProgram % 60;
-  remainingTimeCell.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
