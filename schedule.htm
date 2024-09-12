@@ -1,0 +1,51 @@
+<table id="scheduleTable" border="1">
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Start Time</th>
+      <th>Program Name</th>
+      <th>Remaining Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="statusIcon"><div class="status-icon"></div></td>
+      <td>00:00</td>
+      <td>Program 00</td>
+      <td id="remainingTime0">59:45</td>
+    </tr>
+    <tr>
+      <td><div></div></td>
+      <td>01:00</td>
+      <td>Program 01</td>
+      <td id="remainingTime1">59:45</td>
+    </tr>
+    <!-- Add rows for each program from 00:00 to 23:00 -->
+  </tbody>
+</table>
+
+<style>
+  .status-icon {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: green;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  #scheduleTable {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: center;
+  }
+</style>

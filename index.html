@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Радио-Indexmod</title>
+  <title>Gradient with Oval Button and Audio</title>
   <link rel="stylesheet" href="styles.css"> <!-- Подключаем файл стилей -->
 </head>
 <body>
@@ -12,15 +12,15 @@
   <div class="gradient"></div>
 
   <!-- Овальная кнопка для запуска программы -->
-  <div class="oval-button" onclick="playAudioByTime()">
+  <div id="startButton" class="oval-button" onclick="startProgram()">
     <div class="triangle"></div>
   </div>
 
-  <!-- Кнопка для показа/скрытия аудиоплеера -->
-  <button onclick="togglePlayerVisibility()" style="display: none;">Показать/Скрыть</button>
+  <!-- Скрытый аудиоплеер -->
+  <audio id="audioPlayer" controls style="display: none;"></audio>
 
-  <!-- Аудиоплеер -->
-  <audio id="audioPlayer" controls style="display: none;"></audio> <!-- Плеер по умолчанию скрыт -->
+  <!-- Место для таблицы с расписанием -->
+  <div id="scheduleContainer" style="display: none;"></div>
 
   <script src="script.js"></script> <!-- Подключаем внешний JavaScript -->
 </body>
