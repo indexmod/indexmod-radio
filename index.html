@@ -12,12 +12,12 @@
   <div class="gradient"></div>
 
   <!-- Овальная кнопка с треугольником -->
-  <div class="oval-button" onclick="playAudio()">
+  <div class="oval-button" onclick="playAudioByTime()">
     <div class="triangle"></div>
   </div>
 
   <!-- Скрытый аудиоплеер -->
-  <audio id="audioPlayer" src="/indexmod-radio/audio/program00.mp3"></audio>
+  <audio id="audioPlayer" controls></audio> <!-- Убираем src, добавляем controls для теста -->
 
   <script src="script.js"></script> <!-- Подключаем внешний JavaScript -->
 </body>
