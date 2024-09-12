@@ -27,27 +27,47 @@ function playAudioByTime() {
   "/indexmod-radio/audio/program23.mp3"   // 23:00
 ];
 
-  // Получаем текущее время (часы и минуты)
-  var now = new Date();
-  var currentHour = now.getHours();
-  var currentMinute = now.getMinutes();
 
-  // Выбираем соответствующую программу на основе текущего часа
-  var selectedAudioFile = playlist[currentHour];
-  audio.src = selectedAudioFile;
+// Получаем текущее время (часы и минуты)
+var now = new Date();
+var currentHour = now.getHours();
+var currentMinute = now.getMinutes();
 
-  // Рассчитываем время для начала воспроизведения с учётом минут
-  var startTimeInSeconds = currentMinute * 60;
+// Выбираем соответствующую программу на основе текущего часа
+var selectedAudioFile = playlist[currentHour];
+audio.src = selectedAudioFile;
 
-  // Запускаем воспроизведение с определённой минуты
-  audio.currentTime = startTimeInSeconds;
+// Рассчитываем время для начала воспроизведения с учётом минут
+var startTimeInSeconds = currentMinute * 60;
+audio.currentTime = startTimeInSeconds;
 
-  // Воспроизводим файл
-  audio.play().then(() => {
-    console.log(`Playing ${selectedAudioFile} from ${currentMinute} minute`);
-  }).catch((error) => {
-    console.error("Audio playback failed:", error);
-  });
+// Длительность программы в секундах (59 минут 45 секунд = 3585 секунд)
+var programDuration = 3585;
+var timeLeftInProgram = programDuration - startTimeInSeconds;
+
+// Запускаем воспроизведение
+audio.play().then(() => {
+  console.log(`Playing ${selectedAudioFile} from ${currentMinute} minute`);
+
+  // Останавливаем аудио по истечению оставшегося времени
+  setTimeout(() => {
+    audio.pause();
+    console.log("Program ended");
+  }, timeLeftInProgram * 1000); // Конвертируем секунды в миллисекунды
+
+}).catch((error) => {
+  console.error("Audio playback failed:", error);
+});
+}
+
+// Функция для показа/скрытия аудиоплеера
+function togglePlayerVisibility() {
+var audio = document.getElementById('audioPlayer');
+if (audio.style.display === "none") {
+  audio.style.display = "block"; // Показываем плеер
+} else {
+  audio.style.display = "none";  // Скрываем плеер
+}
 }
 
 // Запускаем функцию при загрузке страницы

@@ -11,13 +11,16 @@
   <!-- Градиентный фон -->
   <div class="gradient"></div>
 
-  <!-- Овальная кнопка с треугольником -->
+  <!-- Овальная кнопка для запуска программы -->
   <div class="oval-button" onclick="playAudioByTime()">
     <div class="triangle"></div>
   </div>
 
-  <!-- Скрытый аудиоплеер -->
-  <audio id="audioPlayer" controls></audio> <!-- Убираем src, добавляем controls для теста -->
+  <!-- Кнопка для показа/скрытия аудиоплеера -->
+  <button onclick="togglePlayerVisibility()">Toggle Player Visibility</button>
+
+  <!-- Аудиоплеер -->
+  <audio id="audioPlayer" controls style="display: none;"></audio> <!-- Плеер по умолчанию скрыт -->
 
   <script src="script.js"></script> <!-- Подключаем внешний JavaScript -->
 </body>
