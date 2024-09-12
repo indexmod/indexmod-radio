@@ -79,11 +79,11 @@ th {
   background-color: transparent; /* Прозрачный фон заголовков */
   border-bottom: 2px solid black; /* Горизонтальная черная линия под заголовками */
   border-right: 1px solid transparent; /* Прозрачные вертикальные границы */
-  border-left: 1px solid transparent; /* Прозрачные вертикальные границы для первой колонки */
   padding: 10px;
   text-align: center;
   font-family: monospace; /* Моноширинный шрифт */
   font-size: 35px; /* Размер шрифта для заголовков */
+  border-top: none; /* Убираем верхние границы */
 }
 
 /* Ячейки таблицы */
@@ -97,10 +97,17 @@ td {
   word-wrap: break-word; /* Включаем перенос текста */
 }
 
+/* Убираем левую вертикальную границу у первой ячейки последней строки */
+#scheduleTable tr:last-child td:first-child {
+  border-left: none;
+}
+
+/* Стиль для первой ячейки с мигающим кругом, убираем лишние границы */
 #statusIcon {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: none; /* Убираем все границы */
 }
 
 .status-icon {
