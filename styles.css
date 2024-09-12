@@ -64,3 +64,40 @@ body, html {
 audio {
   display: none;
 }
+
+.status-icon {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: green;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+#scheduleTable {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse; /* Убираем промежутки между границами ячеек */
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd; /* Горизонтальная линия между строками */
+  font-family: monospace; /* Моноширинный шрифт */
+}
+
+th {
+  background-color: #f4f4f4; /* Цвет фона заголовков */
+}
+
+#statusIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
