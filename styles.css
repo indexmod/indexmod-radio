@@ -1,70 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body, html {
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Анимация градиента фона */
-.gradient {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, red, yellow);
-  background-size: 400% 400%;
-  animation: gradientChange 5s ease infinite;
-  z-index: -1; /* Градиент находится под кнопкой */
-}
-
-@keyframes gradientChange {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Стили для овальной кнопки */
-.oval-button {
-  width: 300px;
-  height: 100px;
-  border: 2px solid black;
-  border-radius: 50px;
-  background-color: transparent;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 1; /* Кнопка поверх градиента */
-}
-
-/* Треугольник в центре кнопки */
-.triangle {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-top: 25px solid black; /* Треугольник повёрнут */
-  transform: rotate(-90deg); /* Поворачиваем треугольник на 90 градусов */
-}
-
-/* Скрытый аудиоплеер */
-audio {
-  display: none;
-}
-
+/* styles.css */
 .status-icon {
   width: 15px;
   height: 15px;
@@ -82,7 +16,7 @@ audio {
 #scheduleTable {
   width: 100%;
   margin-top: 20px;
-  border-collapse: collapse; /* Убираем промежутки между границами ячеек */
+  border-collapse: collapse; /* Убирает промежутки между границами ячеек */
 }
 
 th, td {
