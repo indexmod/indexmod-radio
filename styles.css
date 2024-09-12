@@ -74,25 +74,25 @@ audio {
   background-color: transparent; /* Прозрачный фон */
 }
 
-th, td {
-  padding: 10px;
-  text-align: center;
-  border-bottom: 1px solid #ddd; /* Горизонтальная линия между строками */
-  font-family: monospace; /* Моноширинный шрифт */
-  word-wrap: break-word; /* Включаем перенос текста */
-}
-
+/* Заголовки таблицы */
 th {
   background-color: transparent; /* Прозрачный фон заголовков */
-  border-top: 1px solid transparent; /* Прозрачная верхняя граница для заголовков */
-}
-
-td {
+  border-bottom: 2px solid black; /* Горизонтальная черная линия под заголовками */
   border-right: 1px solid transparent; /* Прозрачные вертикальные границы */
+  border-left: 1px solid transparent; /* Прозрачные вертикальные границы для первой колонки */
+  padding: 10px;
+  text-align: center;
+  font-family: monospace; /* Моноширинный шрифт */
 }
 
-th:first-child, td:first-child {
-  border-left: 1px solid transparent; /* Прозрачные вертикальные границы для первой колонки */
+/* Ячейки таблицы */
+td {
+  border-bottom: 2px solid black; /* Горизонтальная черная линия */
+  border-right: 1px solid transparent; /* Прозрачные вертикальные границы */
+  padding: 10px;
+  text-align: center;
+  font-family: monospace; /* Моноширинный шрифт */
+  word-wrap: break-word; /* Включаем перенос текста */
 }
 
 #statusIcon {
