@@ -1,4 +1,29 @@
-// Функция для воспроизведения аудиофайлов по текущему времени
+// Функция для старта программы и отображения таблицы
+function startProgram() {
+  playAudioByTime(); // Запуск программы
+
+  // Скрываем кнопку запуска
+  var startButton = document.getElementById('startButton');
+  startButton.style.display = 'none';
+
+  // Отображаем таблицу с расписанием программ
+  loadSchedule();
+}
+
+// Функция для загрузки и отображения таблицы расписания программ
+function loadSchedule() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'schedule.html', true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      document.getElementById('scheduleContainer').innerHTML = xhr.responseText;
+      document.getElementById('scheduleContainer').style.display = 'block'; // Показываем таблицу
+    }
+  };
+  xhr.send();
+}
+
+// Функция для воспроизведения аудиофайла по текущему времени
 function playAudioByTime() {
   var audio = document.getElementById('audioPlayer');
   var jingle = new Audio('/indexmod-radio/audio/jingle.mp3'); // Джингл
@@ -81,4 +106,12 @@ function playAudioByTime() {
   }).catch((error) => {
     console.error("Audio playback failed:", error);
   });
+}
+
+// Функция для обновления оставшегося времени в таблице
+function updateRemainingTime(currentHour, timeLeftInProgram) {
+  var remainingTimeCell = document.getElementById('remainingTime' + currentHour);
+  var minutes = Math.floor(timeLeftInProgram / 60);
+  var seconds = timeLeftInProgram % 60;
+  remainingTimeCell.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
