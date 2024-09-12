@@ -37,8 +37,8 @@ body, html {
 
 /* Стили для овальной кнопки */
 .oval-button {
-  width: 150px;
-  height: 80px;
+  width: 300px;
+  height: 54px;
   border: 2px solid black;
   border-radius: 50px;
   background-color: transparent;
