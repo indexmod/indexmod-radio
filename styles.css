@@ -83,6 +83,7 @@ th {
   padding: 10px;
   text-align: center;
   font-family: monospace; /* Моноширинный шрифт */
+  font-size: 35px; /* Размер шрифта для заголовков */
 }
 
 /* Ячейки таблицы */
@@ -92,6 +93,7 @@ td {
   padding: 10px;
   text-align: center;
   font-family: monospace; /* Моноширинный шрифт */
+  font-size: 35px; /* Размер шрифта для ячеек */
   word-wrap: break-word; /* Включаем перенос текста */
 }
 
