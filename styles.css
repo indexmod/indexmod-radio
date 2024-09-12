@@ -1,4 +1,40 @@
 /* styles.css */
+
+/* Стили для градиента фона */
+.gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #ff7e5f, #feb47b); /* Пример градиента */
+  z-index: -1; /* Отправляет градиент на задний план */
+}
+
+/* Стили для овальной кнопки */
+.oval-button {
+  width: 100px;
+  height: 50px;
+  background-color: #4CAF50; /* Цвет кнопки */
+  border-radius: 25px; /* Овальная форма */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.oval-button .triangle {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid white; /* Цвет треугольника */
+}
+
+/* Стили для состояния кнопки и таблицы */
 .status-icon {
   width: 15px;
   height: 15px;
